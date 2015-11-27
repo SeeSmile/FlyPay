@@ -9,19 +9,47 @@ import android.util.Log;
  * on 2015/11/24 at 13:55
  */
 public class FlyLogger {
+
     public static boolean DEBUG = true;
-    public static String TAG = "flytest";
+    public static String TAG = "FlyTest";
+
     public static void logI(String text) {
-        Log.i(TAG, text);
-    }
-    public static void logE(String text) {
-        Log.e(TAG, text);
-    }
-    public static void logD(String text) {
-        Log.d(TAG, text);
-    }
-    public static void logW(String text) {
-        Log.w(TAG, text);
+        if(DEBUG) {
+            if(null != text) {
+                Log.i(TAG, text);
+            } else {
+                Log.i(TAG, "打印了null对象");
+            }
+        }
     }
 
+    public static void logE(String text) {
+        if(DEBUG) {
+            if(null != text) {
+                Log.e(TAG, text);
+            } else {
+                Log.e(TAG, "打印了null对象");
+            }
+        }
+    }
+
+    public static void logD(String text) {
+        if(DEBUG) {
+            if(null != text) {
+                Log.d(TAG, text);
+            } else {
+                Log.d(TAG, "打印了null对象");
+            }
+        }
+    }
+
+    public static void logW(String text) {
+        if(DEBUG) {
+            if(null != text) {
+                Log.w(TAG, text);
+            } else {
+                Log.w(TAG, "打印了null对象");
+            }
+        }
+    }
 }

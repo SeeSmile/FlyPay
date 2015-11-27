@@ -54,7 +54,7 @@ public class LoginActivity extends Activity {
                 user.login(getApplication(), new SaveListener() {
                     @Override
                     public void onSuccess() {
-                        FlyLogger.logI("成功");
+                        FlyLogger.logI("chengg");
                         doSuccess();
                     }
 
@@ -72,7 +72,6 @@ public class LoginActivity extends Activity {
      * 处理登陆成功后的操作
      */
     private void doSuccess() {
-        FlyToast.toast(getApplication(), "You are clever !!!");
         startActivity(new Intent(LoginActivity.this, DataListActivity.class));
     }
 

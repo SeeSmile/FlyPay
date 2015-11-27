@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.brother.flypay.R;
 import com.brother.flypay.adapter.PayDataAdapter;
@@ -14,7 +15,9 @@ import com.brother.flypay.utils.FlyLogger;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.AsyncCustomEndpoints;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.CloudCodeListener;
 import cn.bmob.v3.listener.FindListener;
 
 /**
@@ -26,14 +29,16 @@ import cn.bmob.v3.listener.FindListener;
 public class DataListActivity extends FlyActivity {
     private ListView lv;
     private Button btn_add;
+    private TextView tv_info;
     private List<PayData> listdata;
     private PayDataAdapter mAdapter;
-
+    private float money = 0;
     @Override
     void initView() {
         setContentView(R.layout.activity_data);
         lv = (ListView) findViewById(R.id.data_lv);
         btn_add = (Button) findViewById(R.id.data_btn_add);
+        tv_info = (TextView) findViewById(R.id.data_tv_all);
     }
 
     @Override
@@ -48,7 +53,12 @@ public class DataListActivity extends FlyActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Intent intent = new Intent(DataListActivity.this, DetailDataActivity.class);
+                String title = listdata.get(position).getPaytitle();
+                String text = listdata.get(position).getDescribe();
+                intent.putExtra(DetailDataActivity.DATA_TEXT, text);
+                intent.putExtra(DetailDataActivity.DATA_TITLE, title);
+                startActivity(intent);
             }
         });
 
@@ -63,6 +73,7 @@ public class DataListActivity extends FlyActivity {
     @Override
     void onFinishCreate() {
         getData();
+        setMoney();
     }
 
     public void getData() {
@@ -81,5 +92,36 @@ public class DataListActivity extends FlyActivity {
                 FlyLogger.logI("失败");
             }
         });
+    }
+
+    public void setMoney() {
+        final AsyncCustomEndpoints ace = new AsyncCustomEndpoints();
+        ace.callEndpoint(getApplication(), "getAllMoney", null, new CloudCodeListener() {
+            @Override
+            public void onSuccess(Object object) {
+                String info = "总金额：" + object.toString();
+                tv_info.setText(tv_info.getText() + info);
+                money = Float.parseFloat(object.toString());
+                ace.callEndpoint(getApplication(), "getPay", null,new CloudCodeListener() {
+                    @Override
+                    public void onSuccess(Object object) {
+                        money = money - Float.parseFloat(object.toString());
+                        String info = "    剩余：" + money;
+                        tv_info.setText(tv_info.getText() + info);
+                    }
+
+                    @Override
+                    public void onFailure(int code, String msg) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(int code, String msg) {
+
+            }
+        });
+
     }
 }

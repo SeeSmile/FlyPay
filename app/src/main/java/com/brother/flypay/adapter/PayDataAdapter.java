@@ -13,8 +13,7 @@ import com.brother.flypay.data.PayData;
 import java.util.List;
 
 /**
- * 说明：
- * note：
+ * 说明：数据显示
  * Created by FuPei
  * on 2015/11/24 at 17:55
  */
@@ -56,8 +55,8 @@ public class PayDataAdapter extends BaseAdapter {
             hold = (Holdview) convertView.getTag();
         }
         PayData pay = data.get(position);
-        hold.tv_name.setText(pay.getPayname());
-        hold.tv_date.setText(pay.getCreatedAt());
+        hold.tv_name.setText(pay.getPayperson());
+        hold.tv_date.setText(pay.getCreatedAt().substring(5));
         hold.tv_money.setText(pay.getMoney() + "");
         return convertView;
     }
